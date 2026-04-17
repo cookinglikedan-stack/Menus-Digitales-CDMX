@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Menú Digital CDMX — Estandarización de menús y tecnología QR para restaurantes. Diseño personalizado al alcance de todos." />
+  <title>Menú Digital CDMX | Tecnología Gastronómica de Alto Nivel</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <style>
+    /* ============================================================
+       TOKENS & RESET
+    ============================================================ */
+    :root {
+      --obsidian:     #0C0A08;
+      --obsidian-2:   #13100D;
+      --obsidian-3:   #1C1712;
+      --gold:         #C9A84C;
+      --gold-light:   #E2C97E;
+      --gold-dark:    #8F6B23;
+      --copper:       #B87333;
+      --ivory:        #F5EDD8;
+      --ivory-muted:  #A89880;
+      --white:        #FDFAF5;
+
+      --serif:  'Cormorant Garamond', Georgia, serif;
+      --sans:   'Plus Jakarta Sans', sans-serif;
+      --mono:   'DM Mono', monospace;
+
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out:   cubic-bezier(0.4, 0, 0.2, 1);
+
+      --section-py: clamp(80px, 10vw, 140px);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--sans);
+      background-color: var(--obsidian);
+      color: var(--ivory);
+      line-height: 1.6;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ============================================================
+       CUSTOM CURSOR
+    ============================================================ */
+    #cursor {
+      position: fixed;
+      width: 10px; height: 10px;
+      background: var(--gold);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform 0.08s, width 0.25s var(--ease-out-expo), height 0.25s var(--ease-out-expo), background 0.2s;
+      mix-blend-mode: normal;
+    }
+    #cursor-ring {
+      position: fixed;
+      width: 36px; height: 36px;
+      border: 1px solid rgba(201,168,76,.45);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform 0.22s var(--ease-out-expo), width 0.3s var(--ease-out-expo), height 0.3s var(--ease-out-expo), opacity 0.2s;
+    }
+    body:has(a:hover) #cursor, body:has(button:hover) #cursor {
+      width: 18px; height: 18px;
+      background: var(--gold-light);
+    }
+    body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring {
+      width: 56px; height: 56px;
+      opacity: 0.6;
+    }
+
+    /* ============================================================
+       GRAIN TEXTURE OVERLAY
+    ============================================================ */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      z-index: 9997;
+      pointer-events: none;
+      opacity: .03;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+      background-size: 180px;
+    }
+
+    /* ============================================================
+       TYPOGRAPHY
+    ============================================================ */
+    h1, h2, h3, h4 { font-family: var(--serif); font-weight: 600; line-height: 1.15; }
+    a { text-decoration: none; color: inherit; }
+    img { max-width: 100%; display: block; }
+    ul { list-style: none; }
+
+    .display-serif { font-family: var(--serif); }
+    .mono { font-family: var(--mono); }
+
+    /* ============================================================
+       LAYOUT
+    ============================================================ */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 4vw, 3rem);
+    }
+
+    /* ============================================================
+       REVEAL ANIMATIONS
+    ============================================================ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s var(--ease-out-expo), transform 0.9s var(--ease-out-expo);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.35s; }
+    .reveal-delay-4 { transition-delay: 0.5s; }
+    .reveal-delay-5 { transition-delay: 0.65s; }
+
+    /* ============================================================
+       HEADER
+    ============================================================ */
+    header {
+      position: fixed; top: 0; width: 100%;
+      z-index: 1000;
+      padding: 1.4rem 0;
+      transition: background 0.4s, padding 0.4s;
+    }
+    header.scrolled {
+      background: rgba(12,10,8,.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(201,168,76,.08);
+      padding: 1rem 0;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 clamp(1.25rem, 4vw, 3rem);
+    }
+
+    .logo {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: .5px;
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+    }
+    .logo-dot {
+      width: 8px; height: 8px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .logo-main { color: var(--ivory); }
+    .logo-sub  { color: var(--gold); font-style: italic; }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      align-items: center;
+    }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--ivory-muted);
+      position: relative;
+      transition: color .3s;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0;
+      width: 0; height: 1px;
+      background: var(--gold);
+      transition: width .35s var(--ease-out-expo);
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { width: 100%; }
+
+    .nav-cta {
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold-dark);
+      padding: .55rem 1.2rem;
+      border-radius: 2px;
+      transition: background .3s, color .3s;
+    }
+    .nav-cta:hover { background: var(--gold); color: var(--obsidian); }
+
+    .menu-toggle {
+      display: none;
+      background: none; border: none;
+      color: var(--ivory); font-size: 1.4rem; cursor: none;
+    }
+
+    /* ============================================================
+       HERO
+    ============================================================ */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 8rem 0 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-glow {
+      position: absolute;
+      top: 20%; right: -10%;
+      width: 700px; height: 700px;
+      background: radial-gradient(ellipse, rgba(201,168,76,.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-glow-2 {
+      position: absolute;
+      bottom: -10%; left: -5%;
+      width: 500px; height: 500px;
+      background: radial-gradient(ellipse, rgba(184,115,51,.05) 0%, transparent 65%);
+      pointer-events: none;
+    }
+
+    .hero-line {
+      position: absolute;
+      left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(201,168,76,.3), transparent);
+      animation: scanline 4s ease-in-out infinite;
+    }
+    @keyframes scanline {
+      0%, 100% { top: 15%; opacity: 0; }
+      50% { top: 85%; opacity: 1; }
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: clamp(1.25rem, 4vw, 3rem);
+      width: 1px; height: 100%;
+      background: linear-gradient(180deg, transparent, rgba(201,168,76,.15) 30%, rgba(201,168,76,.15) 70%, transparent);
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0; right: clamp(1.25rem, 4vw, 3rem);
+      width: 1px; height: 100%;
+      background: linear-gradient(180deg, transparent, rgba(201,168,76,.15) 30%, rgba(201,168,76,.15) 70%, transparent);
+    }
+
+    .hero-inner {
+      position: relative; z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-eyebrow {
+      display: flex; align-items: center; gap: .75rem;
+      margin-bottom: 1.8rem;
+      opacity: 0;
+      animation: fadeUp .8s .3s var(--ease-out-expo) forwards;
+    }
+    .hero-eyebrow-line {
+      width: 40px; height: 1px; background: var(--gold);
+    }
+    .hero-eyebrow span {
+      font-family: var(--mono);
+      font-size: .75rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      margin-bottom: 2rem;
+      opacity: 0;
+      animation: fadeUp .9s .5s var(--ease-out-expo) forwards;
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--gold);
+    }
+    .hero-title strong {
+      font-weight: 700;
+      display: block;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: var(--ivory-muted);
+      max-width: 460px;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeUp .9s .7s var(--ease-out-expo) forwards;
+    }
+
+    .hero-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp .9s .9s var(--ease-out-expo) forwards;
+    }
+
+    /* ============================================================
+       PROYECTOS / PORTAFOLIO 
+    ============================================================ */
+    .hero-visual {
+      position: relative;
+      opacity: 0;
+      animation: fadeIn 1.2s .6s var(--ease-out-expo) forwards;
+    }
+
+    .projects-card {
+      background: var(--obsidian-2);
+      border: 1px solid rgba(201,168,76,.18);
+      border-radius: 4px;
+      padding: 1.8rem;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .projects-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
+    }
+
+    .projects-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,.06);
+      padding-bottom: 1rem;
+    }
+
+    .card-label {
+      font-family: var(--mono);
+      font-size: .7rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    .projects-count {
+      font-family: var(--mono);
+      font-size: .65rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      background: rgba(201,168,76,.08);
+      padding: .3rem .8rem;
+      border-radius: 50px;
+      border: 1px solid rgba(201,168,76,.15);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .project-item {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      padding: .9rem;
+      background: var(--obsidian-3);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 4px;
+      transition: all .35s var(--ease-out-expo);
+      text-decoration: none;
+    }
+
+    .project-item:hover {
+      border-color: rgba(201,168,76,.4);
+      transform: translateY(-3px);
+      background: rgba(201,168,76,.04);
+      box-shadow: 0 10px 30px rgba(0,0,0,.4);
+    }
+
+    .project-thumb {
+      width: 42px;
+      height: 42px;
+      background: rgba(201,168,76,.1);
+      border: 1px solid rgba(201,168,76,.2);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    .project-info {
+      display: flex;
+      flex-direction: column;
+      gap: .2rem;
+      overflow: hidden;
+    }
+
+    .project-name {
+      font-family: var(--serif);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--ivory);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .project-link {
+      font-family: var(--mono);
+      font-size: .65rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: .3rem;
+      opacity: .8;
+      transition: opacity .3s;
+    }
+
+    .project-item:hover .project-link {
+      opacity: 1;
+    }
+
+    .project-link i {
+      font-size: .6rem;
+      transition: transform .3s;
+    }
+
+    .project-item:hover .project-link i {
+      transform: translate(2px, -2px);
+    }
+
+    /* ============================================================
+       BUTTONS
+    ============================================================ */
+    .btn {
+      display: inline-flex; align-items: center; gap: .6rem;
+      padding: .9rem 2rem;
+      font-family: var(--mono);
+      font-size: .78rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-radius: 2px;
+      cursor: none;
+      transition: all .3s var(--ease-out-expo);
+      border: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(255,255,255,.08);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .btn:hover::after { opacity: 1; }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--obsidian);
+    }
+    .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 12px 30px rgba(201,168,76,.25); }
+
+    .btn-ghost {
+      background: transparent;
+      border: 1px solid rgba(201,168,76,.4);
+      color: var(--gold);
+    }
+    .btn-ghost:hover { border-color: var(--gold); background: rgba(201,168,76,.06); }
+
+    .btn-whatsapp {
+      background: #25d366;
+      color: #fff;
+    }
+    .btn-whatsapp:hover { background: #1ebe5d; transform: translateY(-2px); }
+
+    .btn-email {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.15);
+      color: var(--ivory-muted);
+    }
+    .btn-email:hover { border-color: var(--ivory-muted); color: var(--ivory); }
+
+    /* ============================================================
+       SECTION HEADERS
+    ============================================================ */
+    .section-kicker {
+      display: flex; align-items: center; gap: .75rem;
+      margin-bottom: 1rem;
+    }
+    .section-kicker-line { width: 30px; height: 1px; background: var(--gold); }
+    .section-kicker span {
+      font-family: var(--mono);
+      font-size: .7rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 300;
+      margin-bottom: 1rem;
+    }
+    .section-title em { font-style: italic; color: var(--gold); }
+    .section-sub {
+      color: var(--ivory-muted);
+      font-size: 1.05rem;
+      max-width: 520px;
+      line-height: 1.75;
+    }
+
+    /* ============================================================
+       DIVIDER
+    ============================================================ */
+    .gold-divider {
+      display: flex; align-items: center; gap: 1rem;
+      padding: 3rem 0;
+    }
+    .gold-divider-line { flex: 1; height: 1px; background: rgba(201,168,76,.12); }
+    .gold-divider-diamond {
+      width: 8px; height: 8px;
+      background: var(--gold);
+      transform: rotate(45deg);
+    }
+
+    /* ============================================================
+       ABOUT - CON IMAGEN CORREGIDA
+    ============================================================ */
+    .about { padding: var(--section-py) 0; background: var(--obsidian-2); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .about-visual-wrap {
+      position: relative;
+    }
+    
+    .about-portrait {
+      width: 100%; 
+      aspect-ratio: 3/4;
+      background: var(--obsidian-3);
+      border: 1px solid rgba(201,168,76,.12);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .about-portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(20%) contrast(1.1);
+      transition: filter 0.5s ease, transform 0.5s ease;
+    }
+    
+    .about-portrait:hover img {
+      filter: grayscale(0%) contrast(1);
+      transform: scale(1.03);
+    }
+    
+    .about-portrait::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(201,168,76,.1) 0%, transparent 50%, rgba(0,0,0,.3) 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .portrait-corner {
+      position: absolute;
+      width: 24px; height: 24px;
+      border-color: var(--gold);
+      border-style: solid;
+      z-index: 2;
+      transition: all 0.3s ease;
+    }
+    .portrait-corner.tl { top: 12px; left: 12px; border-width: 2px 0 0 2px; }
+    .portrait-corner.tr { top: 12px; right: 12px; border-width: 2px 2px 0 0; }
+    .portrait-corner.bl { bottom: 12px; left: 12px; border-width: 0 0 2px 2px; }
+    .portrait-corner.br { bottom: 12px; right: 12px; border-width: 0 2px 2px 0; }
+    
+    .about-portrait:hover .portrait-corner {
+      width: 30px;
+      height: 30px;
+      border-color: var(--gold-light);
+    }
+
+    .about-badge {
+      position: absolute;
+      bottom: -20px; right: -20px;
+      background: var(--obsidian);
+      border: 1px solid rgba(201,168,76,.25);
+      padding: 1rem 1.4rem;
+      border-radius: 2px;
+      z-index: 3;
+      box-shadow: 0 10px 30px rgba(0,0,0,.5);
+    }
+    .about-badge-title {
+      font-family: var(--mono);
+      font-size: .65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: block;
+    }
+    .about-badge-val {
+      font-family: var(--serif);
+      font-size: 1.4rem;
+      font-style: italic;
+      color: var(--ivory);
+    }
+
+    .about-quote {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--ivory-muted);
+      line-height: 1.6;
+      margin: 2rem 0;
+      padding-left: 1.5rem;
+      border-left: 2px solid var(--gold);
+    }
+
+    .about-creds {
+      display: flex; flex-wrap: wrap; gap: .75rem;
+      margin-top: 2rem;
+    }
+    .cred-pill {
+      font-family: var(--mono);
+      font-size: .68rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--ivory-muted);
+      border: 1px solid rgba(255,255,255,.1);
+      padding: .45rem .9rem;
+      border-radius: 50px;
+      display: flex; align-items: center; gap: .5rem;
+      transition: all 0.3s ease;
+    }
+    .cred-pill:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-2px);
+    }
+    .cred-pill i { color: var(--gold); }
+
+    /* ============================================================
+       SERVICES
+    ============================================================ */
+    .services { padding: var(--section-py) 0; }
+
+    .services-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .service-card {
+      background: var(--obsidian-2);
+      border: 1px solid rgba(255,255,255,.05);
+      border-radius: 2px;
+      padding: 2.5rem 2.5rem 2.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color .4s, transform .4s var(--ease-out-expo), box-shadow .4s;
+    }
+    .service-card::after {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, rgba(201,168,76,.04) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity .4s;
+    }
+    .service-card:hover {
+      border-color: rgba(201,168,76,.28);
+      transform: translateY(-6px);
+      box-shadow: 0 30px 60px rgba(0,0,0,.5), 0 0 40px rgba(201,168,76,.06);
+    }
+    .service-card:hover::after { opacity: 1; }
+
+    .service-top-bar {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .5s var(--ease-out-expo);
+    }
+    .service-card:hover .service-top-bar { transform: scaleX(1); }
+
+    .service-number {
+      font-family: var(--serif);
+      font-size: 5rem;
+      font-weight: 700;
+      color: rgba(201,168,76,.06);
+      line-height: 1;
+      position: absolute;
+      top: 1rem; right: 1.5rem;
+      transition: color .4s;
+    }
+    .service-card:hover .service-number { color: rgba(201,168,76,.12); }
+
+    .service-icon-wrap {
+      width: 56px; height: 56px;
+      background: rgba(201,168,76,.08);
+      border: 1px solid rgba(201,168,76,.2);
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      transition: background .3s;
+    }
+    .service-card:hover .service-icon-wrap { background: rgba(201,168,76,.14); }
+
+    .service-card h3 {
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin-bottom: .75rem;
+    }
+    .service-card h3 em { color: var(--gold); font-style: italic; }
+    .service-card p { color: var(--ivory-muted); font-size: .95rem; line-height: 1.75; margin-bottom: 1.5rem; }
+
+    .service-feats li {
+      display: flex; align-items: flex-start; gap: .6rem;
+      padding: .45rem 0;
+      color: var(--ivory-muted);
+      font-size: .88rem;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .service-feats li:last-child { border: none; }
+    .feat-check {
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: rgba(201,168,76,.1);
+      border: 1px solid rgba(201,168,76,.3);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .feat-check i { font-size: .5rem; color: var(--gold); }
+
+    /* ============================================================
+       BENEFITS / TECH
+    ============================================================ */
+    .benefits { padding: var(--section-py) 0; background: var(--obsidian-2); }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 4rem;
+    }
+
+    .benefit-card {
+      padding: 2.2rem 1.8rem;
+      border: 1px solid rgba(255,255,255,.05);
+      border-radius: 2px;
+      background: var(--obsidian);
+      position: relative;
+      overflow: hidden;
+      transition: border-color .35s, transform .35s var(--ease-out-expo);
+    }
+    .benefit-card::before {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      transform: scaleX(0);
+      transition: transform .5s var(--ease-out-expo);
+    }
+    .benefit-card:hover { border-color: rgba(201,168,76,.18); transform: translateY(-4px); }
+    .benefit-card:hover::before { transform: scaleX(1); }
+
+    .benefit-icon-wrap {
+      width: 48px; height: 48px;
+      margin-bottom: 1.2rem;
+      position: relative;
+    }
+    .benefit-icon-bg {
+      width: 100%; height: 100%;
+      background: rgba(201,168,76,.06);
+      border-radius: 50%;
+      position: absolute; inset: 0;
+      transition: transform .4s var(--ease-out-expo);
+    }
+    .benefit-card:hover .benefit-icon-bg { transform: scale(1.2); }
+    .benefit-icon-wrap i {
+      position: relative; z-index: 1;
+      font-size: 1.3rem;
+      color: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      width: 100%; height: 100%;
+    }
+
+    .benefit-card h3 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      margin-bottom: .5rem;
+      font-family: var(--sans);
+    }
+    .benefit-card p { color: var(--ivory-muted); font-size: .88rem; line-height: 1.7; }
+
+    .tech-strip {
+      margin-top: 3rem;
+      padding: 1.2rem 2rem;
+      background: var(--obsidian-3);
+      border: 1px solid rgba(201,168,76,.1);
+      border-radius: 2px;
+      display: flex; align-items: center; gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .tech-strip-label {
+      font-family: var(--mono);
+      font-size: .68rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      white-space: nowrap;
+    }
+    .tech-pills {
+      display: flex; gap: .6rem; flex-wrap: wrap;
+    }
+    .tech-pill {
+      font-family: var(--mono);
+      font-size: .7rem;
+      letter-spacing: 1px;
+      color: var(--ivory-muted);
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      padding: .3rem .8rem;
+      border-radius: 50px;
+    }
+
+    /* ============================================================
+       PROCESS / HOW IT WORKS
+    ============================================================ */
+    .process { padding: var(--section-py) 0; }
+
+    .process-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      margin-top: 4rem;
+      position: relative;
+    }
+    .process-steps::before {
+      content: '';
+      position: absolute;
+      top: 32px; left: 12.5%; right: 12.5%;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold-dark), rgba(201,168,76,.2), var(--gold-dark));
+    }
+
+    .process-step {
+      text-align: center;
+      padding: 0 1.5rem;
+      position: relative;
+    }
+    .step-number {
+      width: 64px; height: 64px;
+      margin: 0 auto 1.5rem;
+      border: 1px solid rgba(201,168,76,.3);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-style: italic;
+      color: var(--gold);
+      background: var(--obsidian);
+      position: relative; z-index: 1;
+      transition: background .35s, border-color .35s;
+    }
+    .process-step:hover .step-number { background: rgba(201,168,76,.08); border-color: var(--gold); }
+
+    .process-step h3 {
+      font-family: var(--sans);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: .5rem;
+    }
+    .process-step p {
+      color: var(--ivory-muted);
+      font-size: .85rem;
+      line-height: 1.65;
+    }
+
+    /* ============================================================
+       FOOTER / CONTACT
+    ============================================================ */
+    footer {
+      border-top: 1px solid rgba(255,255,255,.05);
+      padding: var(--section-py) 0 3rem;
+      position: relative;
+    }
+    footer::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      opacity: .2;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 4rem;
+    }
+
+    .footer-brand .logo { margin-bottom: 1rem; }
+    .footer-brand p { color: var(--ivory-muted); font-size: .9rem; line-height: 1.8; max-width: 320px; margin-bottom: 1.5rem; }
+
+    .footer-social { display: flex; gap: .75rem; }
+    .social-btn {
+      width: 38px; height: 38px;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 2px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ivory-muted);
+      font-size: .9rem;
+      transition: all .3s;
+    }
+    .social-btn:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-3px); }
+
+    .footer-col h4 {
+      font-family: var(--mono);
+      font-size: .7rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+    .footer-col ul li { margin-bottom: .6rem; }
+    .footer-col ul a { color: var(--ivory-muted); font-size: .9rem; transition: color .3s; }
+    .footer-col ul a:hover { color: var(--gold); }
+
+    .footer-contact-btns { display: flex; flex-direction: column; gap: .75rem; }
+
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,.05);
+    }
+    .footer-bottom p { color: var(--ivory-muted); font-size: .8rem; }
+    .footer-bottom-right {
+      font-family: var(--mono);
+      font-size: .68rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(201,168,76,.4);
+    }
+
+    /* ============================================================
+       KEYFRAMES
+    ============================================================ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(28px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 1024px) {
+      .process-steps { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+      .process-steps::before { display: none; }
+    }
+
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
+      .services-layout { grid-template-columns: 1fr; }
+      .benefits-grid { grid-template-columns: 1fr 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+      .footer-grid > :first-child { grid-column: span 2; }
+      .projects-grid { grid-template-columns: 1fr; }
+      .hero-visual { margin-top: 2rem; }
+      .about-portrait { max-width: 400px; margin: 0 auto; }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links, .nav-cta { display: none; }
+      .menu-toggle { display: block; }
+      .hero h1 { font-size: 2.5rem; }
+      .benefits-grid { grid-template-columns: 1fr; }
+      .process-steps { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-grid > :first-child { grid-column: auto; }
+      .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+      .projects-card { padding: 1.2rem; }
+      .project-name { font-size: .95rem; }
+      .about-badge { right: 10px; bottom: -10px; padding: 0.8rem 1rem; }
+    }
+
+    /* ============================================================
+       MOBILE NAV DRAWER
+    ============================================================ */
+    .mobile-nav {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(12,10,8,.97);
+      z-index: 2000;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+    }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-style: italic;
+      color: var(--ivory-muted);
+      transition: color .3s;
+    }
+    .mobile-nav a:hover { color: var(--gold); }
+    .mobile-close {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      background: none; border: none;
+      color: var(--ivory-muted); font-size: 1.5rem; cursor: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CURSOR -->
+  <div id="cursor"></div>
+  <div id="cursor-ring"></div>
+
+  <!-- MOBILE NAV -->
+  <div class="mobile-nav" id="mobileNav">
+    <button class="mobile-close" id="mobileClose" aria-label="Cerrar"><i class="fas fa-times"></i></button>
+    <a href="#inicio" onclick="closeMobile()">Inicio</a>
+    <a href="#sobre-mi" onclick="closeMobile()">Sobre Mí</a>
+    <a href="#servicios" onclick="closeMobile()">Servicios</a>
+    <a href="#contacto" onclick="closeMobile()">Contacto</a>
+  </div>
+
+  <!-- HEADER -->
+  <header id="header">
+    <nav>
+      <a href="#inicio" class="logo">
+        <span class="logo-main">Menú Digital</span>
+        <span class="logo-dot"></span>
+        <span class="logo-sub">CDMX</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#sobre-mi">Sobre Mí</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#proceso">Proceso</a></li>
+        <li><a href="#contacto" class="nav-cta">Contactar</a></li>
+      </ul>
+      <button class="menu-toggle" id="menuToggle" aria-label="Menú"><i class="fas fa-bars"></i></button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero" id="inicio">
+      <div class="hero-glow"></div>
+      <div class="hero-glow-2"></div>
+      <div class="hero-line"></div>
+
+      <div class="container">
+        <div class="hero-inner">
+          <div class="hero-left">
+            <div class="hero-eyebrow">
+              <span class="hero-eyebrow-line"></span>
+              <span>By Daniel Sandoval — CDMX</span>
+            </div>
+            <h1 class="hero-title">
+              Donde la<br>
+              <em>Gastronomía</em><br>
+              <strong>encuentra la Tecnología</strong>
+            </h1>
+            <p class="hero-desc">
+              Menús digitales profesionales y estandarización de cocina. La innovación
+              para tu restaurante ahora está <strong style="color:var(--ivory)">al alcance de todos</strong>.
+            </p>
+            <div class="hero-actions">
+              <a href="#contacto" class="btn btn-gold">
+                <i class="fas fa-rocket"></i>
+                Digitaliza tu Restaurante
+              </a>
+              <a href="#servicios" class="btn btn-ghost">
+                Ver Servicios <i class="fas fa-arrow-right"></i>
+              </a>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="projects-card">
+              <div class="projects-header">
+                <span class="card-label">
+                  <i class="fas fa-folder-open" style="margin-right:.4rem"></i>
+                  Proyectos Recientes
+                </span>
+                <span class="projects-count">6 sitios entregados</span>
+              </div>
+              
+              <div class="projects-grid">
+                <a href="https://cookinglikedan-stack.github.io/Ahogadas-Pre/" target="_blank" class="project-item" rel="noopener">
+                  <div class="project-thumb"><i class="fas fa-utensils"></i></div>
+                  <div class="project-info">
+                    <span class="project-name">Ahogadas Pre</span>
+                    <span class="project-link">Visitar <i class="fas fa-arrow-up-right-from-square"></i></span>
+                  </div>
+                </a>
+
+                <a href="https://cookinglikedan-stack.github.io/maillard-burguers/" target="_blank" class="project-item" rel="noopener">
+                  <div class="project-thumb"><i class="fas fa-burger"></i></div>
+                  <div class="project-info">
+                    <span class="project-name">Maillard Burgers</span>
+                    <span class="project-link">Visitar <i class="fas fa-arrow-up-right-from-square"></i></span>
+                  </div>
+                </a>
+
+                <a href="https://cookinglikedan-stack.github.io/Yasmina-Restaurant/" target="_blank" class="project-item" rel="noopener">
+                  <div class="project-thumb"><i class="fas fa-utensils"></i></div>
+                  <div class="project-info">
+                    <span class="project-name">Yasmina Restaurant</span>
+                    <span class="project-link">Visitar <i class="fas fa-arrow-up-right-from-square"></i></span>
+                  </div>
+                </a>
+
+                <a href="https://cookinglikedan-stack.github.io/Cruda-Ruda/" target="_blank" class="project-item" rel="noopener">
+                  <div class="project-thumb"><i class="fas fa-fish"></i></div>
+                  <div class="project-info">
+                    <span class="project-name">Cruda Ruda</span>
+                    <span class="project-link">Visitar <i class="fas fa-arrow-up-right-from-square"></i></span>
+                  </div>
+                </a>
+
+                <a href="https://cookinglikedan-stack.github.io/BASILICO/" target="_blank" class="project-item" rel="noopener">
+                  <div class="project-thumb"><i class="fas fa-leaf"></i></div>
+                  <div class="project-info">
+                    <span class="project-name">Basilico</span>
+                    <span class="project-link">Visitar <i class="fas fa-arrow-up-right-from-square"></i></span>
+                  </div>
+                </a>
+
+                <a href="https://cookinglikedan-stack.github.io/Dogos-Julio-s/" target="_blank" class="project-item" rel="noopener">
+                  <div class="project-thumb"><i class="fas fa-hotdog"></i></div>
+                  <div class="project-info">
+                    <span class="project-name">Dogos Julio's</span>
+                    <span class="project-link">Visitar <i class="fas fa-arrow-up-right-from-square"></i></span>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOBRE MÍ -->
+    <section class="about" id="sobre-mi">
+      <div class="container">
+        <div class="about-grid">
+          <div class="about-visual-wrap reveal">
+            <div class="about-portrait">
+              <div class="portrait-corner tl"></div>
+              <div class="portrait-corner tr"></div>
+              <div class="portrait-corner bl"></div>
+              <div class="portrait-corner br"></div>
+              
+              <img src="daniel.jpg" alt="Daniel Sandoval - Licenciado en Gastronomía" />
+            </div>
+            
+            <div class="about-badge">
+              <span class="about-badge-title">Formación</span>
+              <span class="about-badge-val">Lic. Gastronomía</span>
+            </div>
+          </div>
+
+          <div>
+            <div class="section-kicker reveal">
+              <span class="section-kicker-line"></span>
+              <span>Sobre Mí</span>
+            </div>
+            <h2 class="section-title reveal reveal-delay-1">
+              Más que un programador,<br>soy <em>cocinero</em> de profesión
+            </h2>
+            <blockquote class="about-quote reveal reveal-delay-2">
+              "Entiendo lo que significa gestionar mermas, optimizar tiempos de servicio
+              y la importancia crítica de un costeo preciso."
+            </blockquote>
+            <p style="color:var(--ivory-muted);line-height:1.8;margin-bottom:1rem;" class="reveal reveal-delay-3">
+              Soy <strong style="color:var(--ivory)">Daniel Sandoval</strong>, Licenciado en Gastronomía con años de experiencia
+              tras la barra y en la cocina. Esta dualidad me permite crear soluciones
+              tecnológicas que realmente funcionan para la industria restaurantera.
+            </p>
+            <p style="color:var(--ivory-muted);line-height:1.8;" class="reveal reveal-delay-3">
+              Sé que un menú no es solo una lista de platillos: es una herramienta de
+              negocio que debe maximizar tu rentabilidad y facilitar tu operación diaria.
+            </p>
+            <div class="about-creds reveal reveal-delay-4">
+              <div class="cred-pill"><i class="fas fa-graduation-cap"></i> Lic. Gastronomía</div>
+              <div class="cred-pill"><i class="fas fa-code"></i> Dev Web Especializado</div>
+              <div class="cred-pill"><i class="fas fa-fire-burner"></i> Experiencia en Cocina</div>
+              <div class="cred-pill"><i class="fas fa-map-marker-alt"></i> Ciudad de México</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIVIDER -->
+    <div class="container">
+      <div class="gold-divider">
+        <div class="gold-divider-line"></div>
+        <div class="gold-divider-diamond"></div>
+        <div class="gold-divider-line"></div>
+      </div>
+    </div>
+
+    <!-- SERVICIOS -->
+    <section class="services" id="servicios">
+      <div class="container">
+        <div class="section-kicker reveal">
+          <span class="section-kicker-line"></span>
+          <span>Nuestros Servicios</span>
+        </div>
+        <h2 class="section-title reveal reveal-delay-1">
+          Soluciones integrales para<br>la <em>industria restaurantera</em>
+        </h2>
+        <p class="section-sub reveal reveal-delay-2">
+          Diseñadas por alguien que conoce tanto la cocina como el código.
+        </p>
+
+        <div class="services-layout">
+          <article class="service-card reveal reveal-delay-1">
+            <div class="service-top-bar"></div>
+            <div class="service-number">01</div>
+            <div class="service-icon-wrap">
+              <i class="fas fa-file-invoice-dollar"></i>
+            </div>
+            <h3>Estandarización<br>de <em>Menús</em></h3>
+            <p>
+              Optimización profesional de recetas, fichas técnicas detalladas y control
+              de costos preciso para maximizar la rentabilidad de tu restaurante.
+            </p>
+            <ul class="service-feats">
+              <li>
+                <div class="feat-check"><i class="fas fa-check"></i></div>
+                Fichas técnicas profesionales
+              </li>
+              <li>
+                <div class="feat-check"><i class="fas fa-check"></i></div>
+                Costeo detallado por platillo
+              </li>
+              <li>
+                <div class="feat-check"><i class="fas fa-check"></i></div>
+                Control de mermas y rendimientos
+              </li>
+              <li>
+                <div class="feat-check"><i class="fas fa-check"></i></div>
+                Capacitación de personal
+              </li>
+            </ul>
+          </article>
+
+          <article class="service-card reveal reveal-delay-2">
+            <div class="service-top-bar"></div>
+            <div class="service-number">02</div>
+            <div class="service-icon-wrap">
+              <i class="fas fa-qrcode"></i>
+            </div>
+            <h3>Menú <em>Digital</em><br>con QR</h3>
+            <p>
+              Menús digitales interactivos programados a medida en código HTML puro.
+              Carga ultrarrápida, diseño personalizado y sin comisiones mensuales.
+            </p>
+            <ul class="service-feats">
+              <li>
+                <div class="feat-check"><i class="fas fa-check"></i></div>
+                Código HTML propio — sin plataformas de terceros
+              </li>
+              <li>
+                <div class="feat-check"><i class="fas fa-check"></i></div>
+                Carga instantánea, sin apps
+              </li>
+              <li>
+                <div class="feat-check"><i class="fas fa-check"></i></div>
+                Diseño 100% personalizado
+              </li>
+              <li>
+                <div class="feat-check"><i class="fas fa-check"></i></div>
+                Actualizaciones ilimitadas sin costo extra
+              </li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFICIOS -->
+    <section class="benefits" id="beneficios">
+      <div class="container">
+        <div class="section-kicker reveal">
+          <span class="section-kicker-line"></span>
+          <span>Por Qué Elegirnos</span>
+        </div>
+        <h2 class="section-title reveal reveal-delay-1">
+          Tecnología que <em>impresiona</em>
+        </h2>
+        <p class="section-sub reveal reveal-delay-2">
+          Ventajas exclusivas de nuestros menús digitales en código HTML puro,
+          construidos desde cero para la experiencia gastronómica.
+        </p>
+
+        <div class="benefits-grid">
+          <div class="benefit-card reveal reveal-delay-1">
+            <div class="benefit-icon-wrap">
+              <div class="benefit-icon-bg"></div>
+              <i class="fas fa-bolt"></i>
+            </div>
+            <h3>Carga Instantánea</h3>
+            <p>Código optimizado que se carga en milisegundos. Tus clientes ven el menú de inmediato al escanear.</p>
+          </div>
+          <div class="benefit-card reveal reveal-delay-2">
+            <div class="benefit-icon-wrap">
+              <div class="benefit-icon-bg"></div>
+              <i class="fas fa-pen-to-square"></i>
+            </div>
+            <h3>Actualización Fácil</h3>
+            <p>Cambia precios, platillos o promociones en segundos. Sin complicaciones ni dependencia de terceros.</p>
+          </div>
+          <div class="benefit-card reveal reveal-delay-3">
+            <div class="benefit-icon-wrap">
+              <div class="benefit-icon-bg"></div>
+              <i class="fas fa-mobile-screen"></i>
+            </div>
+            <h3>Diseño Responsive</h3>
+            <p>Se adapta perfectamente a cualquier smartphone, tablet o dispositivo sin perder su elegancia.</p>
+          </div>
+          <div class="benefit-card reveal reveal-delay-1">
+            <div class="benefit-icon-wrap">
+              <div class="benefit-icon-bg"></div>
+              <i class="fas fa-ban"></i>
+            </div>
+            <h3>Sin Comisiones</h3>
+            <p>Pago único. Tu menú es tuyo: no dependes de ninguna plataforma con tarifas mensuales o por clic.</p>
+          </div>
+          <div class="benefit-card reveal reveal-delay-2">
+            <div class="benefit-icon-wrap">
+              <div class="benefit-icon-bg"></div>
+              <i class="fas fa-magnifying-glass"></i>
+            </div>
+            <h3>Optimización SEO</h3>
+            <p>HTML semántico que ayuda a que tu restaurante aparezca en búsquedas de Google Maps y la web.</p>
+          </div>
+          <div class="benefit-card reveal reveal-delay-3">
+            <div class="benefit-icon-wrap">
+              <div class="benefit-icon-bg"></div>
+              <i class="fas fa-palette"></i>
+            </div>
+            <h3>Identidad Visual</h3>
+            <p>Cada menú refleja el alma de tu restaurante: colores, fuentes y estética 100% personalizada.</p>
+          </div>
+        </div>
+
+        <div class="tech-strip reveal">
+          <span class="tech-strip-label">Stack</span>
+          <div class="tech-pills">
+            <span class="tech-pill">HTML5 Semántico</span>
+            <span class="tech-pill">CSS3 Moderno</span>
+            <span class="tech-pill">JavaScript Vanilla</span>
+            <span class="tech-pill">Optimización SEO</span>
+            <span class="tech-pill">Sin frameworks</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESO -->
+    <section class="process" id="proceso">
+      <div class="container">
+        <div class="section-kicker reveal">
+          <span class="section-kicker-line"></span>
+          <span>Cómo Funciona</span>
+        </div>
+        <h2 class="section-title reveal reveal-delay-1">
+          Del concepto a tu <em>menú digital</em><br>en cuatro pasos
+        </h2>
+
+        <div class="process-steps">
+          <div class="process-step reveal reveal-delay-1">
+            <div class="step-number">1</div>
+            <h3>Diagnóstico</h3>
+            <p>Analizamos tu menú actual, identidad de marca y necesidades operativas.</p>
+          </div>
+          <div class="process-step reveal reveal-delay-2">
+            <div class="step-number">2</div>
+            <h3>Propuesta</h3>
+            <p>Diseñamos un menú digital a la medida de tu restaurante y presupuesto.</p>
+          </div>
+          <div class="process-step reveal reveal-delay-3">
+            <div class="step-number">3</div>
+            <h3>Desarrollo</h3>
+            <p>Programamos tu menú en código HTML con diseño premium en 48 horas.</p>
+          </div>
+          <div class="process-step reveal reveal-delay-4">
+            <div class="step-number">4</div>
+            <h3>Entrega</h3>
+            <p>Recibes tu menú listo, con código QR y soporte post-lanzamiento incluido.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="contacto">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand reveal">
+          <div class="logo" style="margin-bottom:1rem;">
+            <span class="logo-main">Menú Digital</span>
+            <span class="logo-dot"></span>
+            <span class="logo-sub">CDMX</span>
+          </div>
+          <p>Transformando la experiencia gastronómica en la Ciudad de México con soluciones tecnológicas profesionales y accesibles para todo tipo de restaurante.</p>
+          <div class="footer-social">
+            <a class="social-btn" href="https://www.instagram.com/menudigital.cdmx/" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <a class="social-btn" href="https://www.linkedin.com/in/carlos-daniel-flores-sandoval-05ba81168/" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            <a class="social-btn" href="https://www.facebook.com/profile.php?id=61578556276565" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+          </div>
+        </div>
+
+        <div class="footer-col reveal reveal-delay-1">
+          <h4>Navegación</h4>
+          <ul>
+            <li><a href="#inicio">Inicio</a></li>
+            <li><a href="#sobre-mi">Sobre Mí</a></li>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#beneficios">Beneficios</a></li>
+            <li><a href="#proceso">Proceso</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-col reveal reveal-delay-2">
+          <h4>Contacto Directo</h4>
+          <div class="footer-contact-btns">
+            <a href="https://wa.me/523312964550" class="btn btn-whatsapp" target="_blank" rel="noopener">
+              <i class="fab fa-whatsapp"></i> WhatsApp
+            </a>
+            <a href="mailto:cookinglikedan@gmail.com" class="btn btn-email">
+              <i class="fas fa-envelope"></i> Email
+            </a>
+          </div>
+          <p style="color:var(--ivory-muted);margin-top:1.2rem;font-size:.85rem;display:flex;align-items:center;gap:.5rem;">
+            <i class="fas fa-map-marker-alt" style="color:var(--gold);"></i>
+            Ciudad de México, México
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 Menú Digital CDMX — Todos los derechos reservados</p>
+        <span class="footer-bottom-right">Diseñado y desarrollado por Daniel Sandoval</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const cursor = document.getElementById('cursor');
+    const cursorRing = document.getElementById('cursor-ring');
+    let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+    let rx = mx, ry = my;
+
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cursor.style.left = mx + 'px';
+      cursor.style.top  = my + 'px';
+    });
+
+    function animateCursor() {
+      rx += (mx - rx) * 0.14;
+      ry += (my - ry) * 0.14;
+      cursorRing.style.left = rx + 'px';
+      cursorRing.style.top  = ry + 'px';
+      requestAnimationFrame(animateCursor);
+    }
+    animateCursor();
+
+    const header = document.getElementById('header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileNav  = document.getElementById('mobileNav');
+    const mobileClose = document.getElementById('mobileClose');
+
+    menuToggle.addEventListener('click', () => mobileNav.classList.add('open'));
+    mobileClose.addEventListener('click', () => mobileNav.classList.remove('open'));
+
+    function closeMobile() {
+      mobileNav.classList.remove('open');
+    }
+
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    reveals.forEach(el => observer.observe(el));
+
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
