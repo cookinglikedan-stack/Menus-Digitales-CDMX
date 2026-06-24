@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nuestros Proyectos - MenuCDMX</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-secondary-fixed-variant": "#71361c",
+            "outline-variant": "#c2c8c1",
+            "on-secondary-container": "#793c22",
+            "on-secondary": "#ffffff",
+            "surface-container-high": "#e8e8e6",
+            "error": "#ba1a1a",
+            "surface-bright": "#f9f9f7",
+            "inverse-primary": "#afceb6",
+            "tertiary-fixed-dim": "#c8c6c6",
+            "surface-container-lowest": "#ffffff",
+            "primary-fixed-dim": "#afceb6",
+            "on-surface-variant": "#424843",
+            "on-error-container": "#93000a",
+            "primary-container": "#98b69f",
+            "on-error": "#ffffff",
+            "tertiary-container": "#b0aeae",
+            "primary": "#496551",
+            "on-primary": "#ffffff",
+            "secondary-container": "#ffa988",
+            "surface-container-low": "#f4f4f2",
+            "error-container": "#ffdad6",
+            "secondary": "#8e4c31",
+            "on-tertiary-fixed": "#1b1c1c",
+            "inverse-surface": "#2f3130",
+            "surface-container-highest": "#e2e3e1",
+            "surface": "#f9f9f7",
+            "on-tertiary-fixed-variant": "#474747",
+            "on-primary-fixed-variant": "#324d3a",
+            "background": "#f9f9f7",
+            "on-primary-container": "#2d4836",
+            "surface-container": "#eeeeec",
+            "primary-fixed": "#cbead1",
+            "surface-dim": "#dadad8",
+            "on-tertiary-container": "#424242",
+            "surface-variant": "#e2e3e1",
+            "tertiary-fixed": "#e4e2e1",
+            "on-surface": "#1a1c1b",
+            "on-background": "#1a1c1b",
+            "inverse-on-surface": "#f1f1ef",
+            "tertiary": "#5f5e5e",
+            "on-tertiary": "#ffffff",
+            "outline": "#727972",
+            "secondary-fixed-dim": "#ffb599",
+            "on-secondary-fixed": "#370e00",
+            "on-primary-fixed": "#052011",
+            "surface-tint": "#496551",
+            "secondary-fixed": "#ffdbce"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "unit": "8px",
+            "section-padding": "80px",
+            "card-gap": "32px",
+            "gutter": "24px",
+            "container-max": "1200px"
+          },
+          "fontFamily": {
+            "body-lg": ["Plus Jakarta Sans"],
+            "display-lg-mobile": ["Plus Jakarta Sans"],
+            "body-md": ["Plus Jakarta Sans"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "display-lg": ["Plus Jakarta Sans"],
+            "label-sm": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+            "display-lg-mobile": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+            "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+            "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+            "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+            "label-sm": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      background-color: #f9f9f7;
+      color: #1a1c1b;
+      -webkit-font-smoothing: antialiased;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .project-card:hover {
+      box-shadow: 0px 4px 20px rgba(0,0,0,0.04);
+      transform: translateY(-2px);
+    }
+    .hover-scale {
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .hover-scale:active {
+      transform: scale(0.98);
+    }
+  </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- TopNavBar Navigation Shell -->
+<nav class="bg-surface/90 dark:bg-surface-container/90 docked full-width top-0 sticky backdrop-blur-md border-b border-outline-variant/30 z-50 transition-all duration-300">
+<div class="flex justify-between items-center w-full px-gutter max-w-container-max mx-auto py-4">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary tracking-tight">
+        MenuCDMX
+      </div>
+<!-- Desktop Navigation -->
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">About</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">How It Works</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary transition-colors font-label-sm text-label-sm" href="#">Contact</a>
+<button class="bg-primary hover:opacity-80 transition-all duration-300 text-on-primary font-label-sm text-label-sm px-6 py-2.5 rounded-full hover-scale">
+          Get Started
+        </button>
+</div>
+<!-- Mobile Menu Toggle -->
+<button class="md:hidden text-primary p-2">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="max-w-container-max mx-auto px-gutter py-section-padding text-center md:text-left">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+<div class="space-y-6">
+<span class="text-secondary font-label-sm text-label-sm uppercase tracking-widest">Nuestra Galería</span>
+<h1 class="font-display-lg text-display-lg text-on-background leading-tight">Nuestros Proyectos</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg">
+          Acompañamos a las propuestas gastronómicas más icónicas de la Ciudad de México en su transición hacia una experiencia digital sofisticada, táctil y sin fricciones.
+        </p>
+</div>
+<div class="relative rounded-xl overflow-hidden aspect-[4/3] shadow-lg">
+<div class="absolute inset-0 bg-primary/10 mix-blend-multiply"></div>
+<img class="w-full h-full object-cover" data-alt="A sophisticated close-up of a gourmet Mexican dish featuring complex mole and colorful edible flowers, presented on a minimalist ceramic plate. The lighting is soft and natural, reflecting a high-end restaurant atmosphere with a clean, airy aesthetic and neutral artisanal tones that match a sage green and terracotta palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuByCVZzROnOngvzmlJNQlcbpEBnTLpsBF7nNgo9JbUq2642xyDxKuCZAwz-E7qma87HkPS03ORqiQBre29bTf0WCYEmOFDRAPMhjAHSCkjnZvlbRRDBKZMbNBKggxJmuWjA4CXaTPBd_tgolynLB-wM5V4TR5Tffv1Vljn5eAj3D4lF889Ez99FBAJVRC4emspS8Hu3DQT60zIntlGPHEPvFSx33hGrgoMrnPDdSlhKdVmcbfEfDiQ-"/>
+</div>
+</div>
+</header>
+<!-- Gallery Section -->
+<section class="max-w-container-max mx-auto px-gutter py-section-padding">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-background">Casos de Éxito</h2>
+<p class="text-on-surface-variant mt-2">Explora nuestras implementaciones más recientes.</p>
+</div>
+<div class="flex gap-2">
+<button class="p-3 rounded-full border border-outline-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</div>
+<!-- Bento Grid Inspired Gallery -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Project 1: Rosetta -->
+<div class="md:col-span-8 group">
+<div class="project-card bg-surface-container-lowest rounded-xl overflow-hidden transition-all duration-500 border border-outline-variant/30 flex flex-col h-full">
+<div class="relative overflow-hidden aspect-[16/9]">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="The elegant interior of Rosetta restaurant in Mexico City, featuring high ceilings, white brick walls, and a curated selection of artisanal breads on white marble counters. The atmosphere is warm, inviting, and luminous, capturing the essence of fine Italian-Mexican fusion dining in a historic mansion setting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDsR286gqkhD4UJIgjYPYf6l3znL42sV4TbAomjOgc8032G3lJOnbeL2wLiGoCDnbIE8mIDLDG6EwGjat-k1HMi6vON9PymNIIgwqMfRzXkZbnBIFeBQueuZKoDjPs37WsJgFOEGIg32jVzzOjsfiRB98hqUDLX5oDfav-ZgqIjqohg9w2_C0JlZJhjoP5cAbb2fxqRLE7e92ZiSoJbDIZaepGn5DCPqRSTMHCF3pZVYxQLaKbIHkIc"/>
+<div class="absolute top-4 left-4">
+<span class="bg-primary/90 backdrop-blur text-on-primary font-label-sm text-label-sm px-3 py-1 rounded-full">QR Integration</span>
+</div>
+</div>
+<div class="p-8 space-y-4 flex-grow">
+<h3 class="font-headline-md text-headline-md text-on-background">Rosetta</h3>
+<p class="text-on-surface-variant font-body-md text-body-md leading-relaxed">
+              Implementación de una plataforma de pedidos digitales que preserva la estética artesanal de la panadería y el restaurante. Integración completa de inventario en tiempo real para sus productos de temporada.
+            </p>
+<div class="pt-4">
+<a class="text-secondary font-label-sm text-label-sm flex items-center group/link" href="#">
+                Ver Caso de Estudio
+                <span class="material-symbols-outlined ml-2 transition-transform group-hover/link:translate-x-1">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Project 2: Quintonil -->
+<div class="md:col-span-4 group">
+<div class="project-card bg-surface-container-lowest rounded-xl overflow-hidden transition-all duration-500 border border-outline-variant/30 flex flex-col h-full">
+<div class="relative overflow-hidden aspect-square">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A meticulously plated modern Mexican dish from Quintonil, showcasing vibrant green herbs and bright orange ingredients on a dark stone plate. The photography style is moody yet crisp, highlighting the textures of the fine dining ingredients with soft ambient light and deep shadows." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB26IYEfxFkynnU1zq2qfOGaxlSr_tIE49can1u3U67T-Fbw0dJ6gFzj6PXY92LXVBJ45fXw2XUz9waFCktu3v-UcCRzflZ0XFH41XYpyOOIlmggokxPQlyMSJZRcDZpduDczv-RBgcu8qBV6bIX9cop54I1Kr9k1Vu1dGEI01Ugw-Y7_szvCRzw9n9yqlL9952-qVfmzBYlyvosJz3Dlcr9qtCUUnSCiRY4Pvyx-F6lf7Y2aDdcGWd"/>
+<div class="absolute top-4 left-4">
+<span class="bg-secondary/90 backdrop-blur text-on-primary font-label-sm text-label-sm px-3 py-1 rounded-full">Interactive Menu</span>
+</div>
+</div>
+<div class="p-8 space-y-4 flex-grow">
+<h3 class="font-headline-md text-headline-md text-on-background">Quintonil</h3>
+<p class="text-on-surface-variant font-body-md text-body-md leading-relaxed">
+              Digitalización del menú de degustación interactivo con narrativas visuales sobre el origen de los ingredientes locales.
+            </p>
+<div class="pt-4">
+<a class="text-secondary font-label-sm text-label-sm flex items-center group/link" href="#">
+                Ver Caso de Estudio
+                <span class="material-symbols-outlined ml-2 transition-transform group-hover/link:translate-x-1">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- Project 3: Pujol -->
+<div class="md:col-span-4 group">
+<div class="project-card bg-surface-container-lowest rounded-xl overflow-hidden transition-all duration-500 border border-outline-variant/30 flex flex-col h-full">
+<div class="relative overflow-hidden aspect-square">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="Minimalist architectural interior of Pujol restaurant, featuring clean lines, light wood furniture, and large windows that allow natural light to fill the space. The design reflects zen-like tranquility and contemporary Mexican elegance, emphasizing whitespace and artisanal simplicity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdQyJt7zO-EckwXX22989jQAiyTdhQz8TXTzVUnWXhSCPvGAAnBQ7iQgmEJHhPiCt7SZqhkulEASBdtgDdDd434ejmDe8bpURiBsVlbhf_0mAKiFIX__NXTlqLJ-IepcYUrDJkABvxEQPQPM9YUqkn03dPX9NpToSia--fq4REgqY9sybLY0lX0ekbkpqvgoAqp4IDQ-7g6WIH0WfJEMD0Fxe2BsF50CMOFwOy7wnvy_a1kvb_lw5b"/>
+<div class="absolute top-4 left-4">
+<span class="bg-primary/90 backdrop-blur text-on-primary font-label-sm text-label-sm px-3 py-1 rounded-full">Luxury UI</span>
+</div>
+</div>
+<div class="p-8 space-y-4 flex-grow">
+<h3 class="font-headline-md text-headline-md text-on-background">Pujol</h3>
+<p class="text-on-surface-variant font-body-md text-body-md leading-relaxed">
+              Diseño de interfaz minimalista para el Ombu y la barra de tacos, enfocada en una navegación fluida para clientes internacionales.
+            </p>
+<div class="pt-4">
+<a class="text-secondary font-label-sm text-label-sm flex items-center group/link" href="#">
+                Ver Caso de Estudio
+                <span class="material-symbols-outlined ml-2 transition-transform group-hover/link:translate-x-1">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<!-- CTA Content Block -->
+<div class="md:col-span-8 bg-primary-container/20 rounded-xl p-12 flex flex-col justify-center items-center text-center space-y-6">
+<h3 class="font-display-lg-mobile text-display-lg-mobile text-on-primary-container">¿Listo para digitalizar tu propuesta?</h3>
+<p class="text-on-primary-container/80 max-w-lg font-body-lg text-body-lg">
+          Únete a la nueva era de la hospitalidad en México. Creamos soluciones a medida que respetan la esencia de tu cocina.
+        </p>
+<button class="bg-primary text-on-primary px-10 py-4 rounded-full font-label-sm text-label-sm hover-scale transition-all shadow-md">
+          Agenda una Consultoría
+        </button>
+</div>
+</div>
+</section>
+<!-- Statistics Section -->
+<section class="bg-surface-container py-section-padding border-y border-outline-variant/20">
+<div class="max-w-container-max mx-auto px-gutter grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+<div class="space-y-2">
+<div class="text-secondary font-display-lg-mobile text-display-lg-mobile">50+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Restaurantes</p>
+</div>
+<div class="space-y-2">
+<div class="text-secondary font-display-lg-mobile text-display-lg-mobile">1.2M</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Menus Vistos</p>
+</div>
+<div class="space-y-2">
+<div class="text-secondary font-display-lg-mobile text-display-lg-mobile">15%</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Aumento en Ticket</p>
+</div>
+<div class="space-y-2">
+<div class="text-secondary font-display-lg-mobile text-display-lg-mobile">2020</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Desde</p>
+</div>
+</div>
+</section>
+<!-- Footer Navigation Shell -->
+<footer class="bg-surface dark:bg-surface-dim border-t border-outline-variant/20 py-12">
+<div class="max-w-container-max mx-auto px-gutter flex flex-col md:flex-row justify-between items-center gap-8">
+<div class="flex flex-col items-center md:items-start gap-4">
+<div class="font-headline-md text-headline-md text-primary font-bold">
+          MenuCDMX
+        </div>
+<p class="text-on-surface-variant font-label-sm text-label-sm">Diseño y tecnología para la alta cocina.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-x-8 gap-y-4">
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-sm text-label-sm" href="#">About</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-sm text-label-sm" href="#">How It Works</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-sm text-label-sm" href="#">Contact</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-sm text-label-sm" href="#">Privacy Policy</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors font-label-sm text-label-sm" href="#">Terms</a>
+</div>
+<div class="text-secondary dark:text-secondary-fixed font-label-sm text-label-sm">
+        © 2024 MenuCDMX
+      </div>
+</div>
+</footer>
+<script>
+    // Simple intersection observer for reveal animations
+    const observerOptions = {
+      threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove('opacity-0', 'translate-y-4');
+          entry.target.classList.add('opacity-100', 'translate-y-0');
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.project-card').forEach(card => {
+      card.classList.add('opacity-0', 'translate-y-4', 'transition-all', 'duration-700');
+      observer.observe(card);
+    });
+  </script>
+</body></html>
